@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Activity, BarChart3, FlaskConical, BookOpen,
-  Bell, Settings, ChevronLeft, ChevronRight, Zap, TrendingUp, Menu, X
+  Bell, Settings, ChevronLeft, ChevronRight, Zap, TrendingUp, Menu, X, Radar
 } from 'lucide-react';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/scanner', label: 'Scanner', icon: Radar },
   { path: '/signals', label: 'Signals', icon: Zap },
   { path: '/strategies', label: 'Strategies', icon: Activity },
   { path: '/backtest', label: 'Backtest', icon: FlaskConical },

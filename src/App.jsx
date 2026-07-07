@@ -15,6 +15,7 @@ import ResetPassword from '@/pages/ResetPassword';
 
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import Home from '@/pages/Home';
+import MarketScanner from '@/pages/MarketScanner';
 import InstrumentDetail from '@/pages/InstrumentDetail';
 import Signals from '@/pages/Signals';
 import Strategies from '@/pages/Strategies';
@@ -57,6 +58,7 @@ const AuthenticatedApp = () => {
       <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/scanner" element={<MarketScanner />} />
           <Route path="/instrument/:symbol" element={<InstrumentDetail />} />
           <Route path="/signals" element={<Signals />} />
           <Route path="/strategies" element={<Strategies />} />

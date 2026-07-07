@@ -2,11 +2,17 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { analyzeInstrument, generateSignalExplanation } from '@/lib/signalEngine';
+import { computeInstitutionalConfidence } from '@/lib/confidenceEngine';
+import { calculateStrength } from '@/lib/strengthMeter';
 import { DEFAULT_INSTRUMENTS, STRATEGIES, RISK_COLORS } from '@/lib/constants';
 import SignalBadge from '@/components/dashboard/SignalBadge';
 import ConfidenceMeter from '@/components/dashboard/ConfidenceMeter';
 import TimeframeBar from '@/components/dashboard/TimeframeBar';
-import { ArrowLeft, Zap, Brain, RefreshCw, Loader2 } from 'lucide-react';
+import RegimeBadge from '@/components/dashboard/RegimeBadge';
+import StrengthMeter from '@/components/dashboard/StrengthMeter';
+import ConsensusMatrix from '@/components/dashboard/ConsensusMatrix';
+import InstitutionalConfidencePanel from '@/components/dashboard/InstitutionalConfidencePanel';
+import { ArrowLeft, Zap, Brain, Loader2, Activity, Gauge } from 'lucide-react';
 
 export default function InstrumentDetail() {
   const { symbol } = useParams();
@@ -15,6 +21,18 @@ export default function InstrumentDetail() {
   const [explanation, setExplanation] = useState('');
   const [loadingExplanation, setLoadingExplanation] = useState(false);
   const [recentSignals, setRecentSignals] = useState([]);
+
+  const ic = useMemo(() => {
+    if (!analysis) return null;
+    return computeInstitutionalConfidence(
+      analysis.symbol, analysis.name, analysis.asset_class, '1h', analysis.soloSignals
+    );
+  }, [analysis]);
+
+  const strength = useMemo(() => {
+    if (!analysis) return null;
+    return calculateStrength(analysis.symbol);
+  }, [analysis]);
 
   useEffect(() => {
     const inst = DEFAULT_INSTRUMENTS.find(i => i.symbol === symbol);
@@ -33,19 +51,19 @@ export default function InstrumentDetail() {
   }
 
   async function handleGetExplanation() {
-    if (!analysis?.confirmed) return;
+    if (!ic) return;
     setLoadingExplanation(true);
     const text = await generateSignalExplanation({
-      instrument_symbol: analysis.symbol,
-      instrument_name: analysis.name,
-      direction: analysis.confirmed.direction,
-      confidence: analysis.confirmed.confidence,
+      instrument_symbol: ic.symbol,
+      instrument_name: ic.name,
+      direction: ic.final_direction,
+      confidence: ic.institutional_confidence,
       signal_type: 'confirmed',
-      strategy_name: 'Combined',
-      trend_context: analysis.confirmed.trend_context,
-      risk_level: analysis.confirmed.risk_level,
-      agreement_count: analysis.confirmed.agreement,
-      strategies_agreeing: analysis.confirmed.strategiesAgreeing,
+      strategy_name: 'Institutional Confidence Engine',
+      trend_context: ic.regime?.label || 'N/A',
+      risk_level: 'Medium',
+      agreement_count: ic.agreement,
+      strategies_agreeing: ic.weighted_votes?.filter(v => v.direction === ic.final_direction).map(v => v.strategy_name),
     });
     setExplanation(text);
     setLoadingExplanation(false);
@@ -62,7 +80,7 @@ export default function InstrumentDetail() {
   return (
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-wrap">
         <button onClick={() => navigate('/')} className="p-2 rounded-lg hover:bg-secondary transition-colors">
           <ArrowLeft className="w-4 h-4" />
         </button>
@@ -70,55 +88,76 @@ export default function InstrumentDetail() {
           <h1 className="font-heading font-bold text-xl">{analysis.symbol}</h1>
           <p className="text-sm text-muted-foreground">{analysis.name} · {analysis.asset_class}</p>
         </div>
-        {analysis.confirmed && (
-          <div className="ml-auto">
-            <SignalBadge direction={analysis.confirmed.direction} confidence={analysis.confirmed.confidence} size="lg" />
-          </div>
+        <div className="ml-auto flex items-center gap-2">
+          {ic?.regime && <RegimeBadge regime={ic.regime} size="lg" />}
+        </div>
+      </div>
+
+      {/* Institutional Confidence Panel */}
+      {ic && <InstitutionalConfidencePanel ic={ic} />}
+
+      {/* AI Market Commentary */}
+      <div className="rounded-xl border border-purple-500/20 bg-card p-4">
+        <div className="flex items-center gap-2 mb-2">
+          <Brain className="w-4 h-4 text-purple-400" />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-purple-400">AI Market Commentary</h3>
+        </div>
+        {explanation ? (
+          <p className="text-sm text-foreground/80 leading-relaxed">{explanation}</p>
+        ) : (
+          <button onClick={handleGetExplanation} disabled={loadingExplanation}
+            className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors">
+            {loadingExplanation ? <Loader2 className="w-4 h-4 animate-spin" /> : <Brain className="w-4 h-4" />}
+            {loadingExplanation ? 'Generating commentary...' : 'Generate AI market commentary'}
+          </button>
         )}
       </div>
 
-      {/* Confirmed Signal Panel */}
-      {analysis.confirmed && (
-        <div className="signal-confirmed-glow rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-transparent p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <Zap className="w-4 h-4 text-amber-400" />
-            <h2 className="font-heading font-semibold text-sm uppercase tracking-wider text-amber-400">Confirmed Signal</h2>
+      {/* AI Consensus Matrix */}
+      {ic && (
+        <div className="rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Activity className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">AI Consensus Matrix</h3>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Direction</div>
-              <SignalBadge direction={analysis.confirmed.direction} size="md" />
-            </div>
-            <div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Confidence</div>
-              <ConfidenceMeter value={analysis.confirmed.confidence} size="lg" />
-            </div>
-            <div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Agreement</div>
-              <div className="font-mono font-bold text-lg text-amber-400">{analysis.confirmed.agreement}</div>
-            </div>
-            <div>
-              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Risk</div>
-              <div className={`font-semibold ${RISK_COLORS[analysis.confirmed.risk_level]}`}>{analysis.confirmed.risk_level}</div>
-              <div className="text-xs text-muted-foreground">{analysis.confirmed.trend_context}</div>
-            </div>
-          </div>
+          <ConsensusMatrix weightedVotes={ic.weighted_votes} />
+        </div>
+      )}
 
-          {/* AI Explanation */}
-          <div className="mt-4 pt-4 border-t border-amber-500/20">
-            {explanation ? (
-              <div className="flex items-start gap-2">
-                <Brain className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-foreground/80 leading-relaxed">{explanation}</p>
-              </div>
-            ) : (
-              <button onClick={handleGetExplanation} disabled={loadingExplanation}
-                className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                {loadingExplanation ? <Loader2 className="w-4 h-4 animate-spin" /> : <Brain className="w-4 h-4" />}
-                {loadingExplanation ? 'Generating explanation...' : 'Get AI explanation'}
-              </button>
-            )}
+      {/* Strength Meter */}
+      {strength && (
+        <div className="rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Gauge className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Strength Meter</h3>
           </div>
+          <StrengthMeter scores={strength} />
+        </div>
+      )}
+
+      {/* Market Regime detail */}
+      {ic?.regime && (
+        <div className="rounded-xl border border-border bg-card p-4">
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Market Regime Analysis</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
+            <div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">Detected Regime</div>
+              <RegimeBadge regime={ic.regime} size="lg" />
+            </div>
+            <div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">ADX (Trend)</div>
+              <div className="font-mono font-bold text-lg">{ic.regime.metrics.adx}</div>
+            </div>
+            <div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">ATR %</div>
+              <div className="font-mono font-bold text-lg">{ic.regime.metrics.atr_percent}%</div>
+            </div>
+            <div>
+              <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">BB Width</div>
+              <div className="font-mono font-bold text-lg">{ic.regime.metrics.bollinger_width}</div>
+            </div>
+          </div>
+          <p className="text-sm text-muted-foreground leading-relaxed">{ic.regime.description}</p>
         </div>
       )}
 
