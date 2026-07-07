@@ -1,0 +1,63 @@
+{
+  "name": "PaperTrade",
+  "type": "object",
+  "properties": {
+    "signal_id": {
+      "type": "string"
+    },
+    "instrument_symbol": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL"
+      ]
+    },
+    "entry_price": {
+      "type": "number"
+    },
+    "stop_loss": {
+      "type": "number"
+    },
+    "take_profit": {
+      "type": "number"
+    },
+    "exit_price": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "closed_win",
+        "closed_loss",
+        "closed_breakeven"
+      ],
+      "default": "open"
+    },
+    "pnl_pips": {
+      "type": "number"
+    },
+    "pnl_percent": {
+      "type": "number"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "closed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "instrument_symbol",
+    "direction",
+    "entry_price"
+  ]
+}

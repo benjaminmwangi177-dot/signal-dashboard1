@@ -1,0 +1,44 @@
+{
+  "name": "NotificationConfig",
+  "type": "object",
+  "properties": {
+    "channel": {
+      "type": "string",
+      "enum": [
+        "telegram",
+        "whatsapp",
+        "email",
+        "discord",
+        "browser_push"
+      ]
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": false
+    },
+    "webhook_url": {
+      "type": "string"
+    },
+    "chat_id": {
+      "type": "string"
+    },
+    "email_address": {
+      "type": "string"
+    },
+    "signal_tier": {
+      "type": "string",
+      "enum": [
+        "confirmed_only",
+        "all_signals"
+      ],
+      "default": "confirmed_only"
+    },
+    "min_confidence": {
+      "type": "number",
+      "default": 70
+    }
+  },
+  "required": [
+    "channel"
+  ]
+}

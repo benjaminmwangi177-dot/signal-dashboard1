@@ -1,0 +1,43 @@
+{
+  "name": "StrategyConfig",
+  "type": "object",
+  "properties": {
+    "strategy_key": {
+      "type": "string",
+      "description": "Unique key: smart_money, ai_ml, chart_patterns, candlestick, technical_indicators, wyckoff_ict"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "weight": {
+      "type": "number",
+      "default": 1.0,
+      "description": "Weight in confirmation engine"
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Strategy-specific settings"
+    },
+    "accuracy_history": {
+      "type": "number",
+      "default": 50,
+      "description": "Rolling accuracy %"
+    },
+    "total_signals": {
+      "type": "number",
+      "default": 0
+    },
+    "correct_signals": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "strategy_key",
+    "display_name"
+  ]
+}

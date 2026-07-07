@@ -1,0 +1,109 @@
+{
+  "name": "Signal",
+  "type": "object",
+  "properties": {
+    "instrument_symbol": {
+      "type": "string"
+    },
+    "instrument_name": {
+      "type": "string"
+    },
+    "asset_class": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "BUY",
+        "SELL",
+        "NEUTRAL"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "description": "0-100 confidence percentage"
+    },
+    "signal_type": {
+      "type": "string",
+      "enum": [
+        "solo",
+        "confirmed"
+      ],
+      "default": "solo"
+    },
+    "strategy_name": {
+      "type": "string",
+      "description": "Which strategy generated this"
+    },
+    "timeframe": {
+      "type": "string"
+    },
+    "trend_context": {
+      "type": "string",
+      "description": "e.g. Strong Bullish, Ranging"
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    "agreement_count": {
+      "type": "string",
+      "description": "e.g. 6/9 strategies aligned"
+    },
+    "explanation": {
+      "type": "string",
+      "description": "AI-generated plain language reasoning"
+    },
+    "quality_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Any quality warnings"
+    },
+    "strategies_agreeing": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "entry_price": {
+      "type": "number"
+    },
+    "stop_loss": {
+      "type": "number"
+    },
+    "take_profit": {
+      "type": "number"
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "win",
+        "loss",
+        "breakeven",
+        "expired"
+      ],
+      "default": "pending"
+    },
+    "outcome_pnl": {
+      "type": "number"
+    },
+    "expired_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "instrument_symbol",
+    "direction",
+    "confidence",
+    "signal_type",
+    "strategy_name"
+  ]
+}

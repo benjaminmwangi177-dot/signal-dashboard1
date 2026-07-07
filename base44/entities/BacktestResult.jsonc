@@ -1,0 +1,53 @@
+{
+  "name": "BacktestResult",
+  "type": "object",
+  "properties": {
+    "strategy_key": {
+      "type": "string"
+    },
+    "instrument_symbol": {
+      "type": "string"
+    },
+    "timeframe": {
+      "type": "string"
+    },
+    "lookback_period": {
+      "type": "string",
+      "description": "e.g. 1Y, 5Y"
+    },
+    "total_trades": {
+      "type": "number"
+    },
+    "win_rate": {
+      "type": "number"
+    },
+    "profit_factor": {
+      "type": "number"
+    },
+    "sharpe_ratio": {
+      "type": "number"
+    },
+    "max_drawdown": {
+      "type": "number"
+    },
+    "expectancy": {
+      "type": "number"
+    },
+    "equity_curve": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "monte_carlo_results": {
+      "type": "object"
+    },
+    "walk_forward_results": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "strategy_key",
+    "instrument_symbol"
+  ]
+}
