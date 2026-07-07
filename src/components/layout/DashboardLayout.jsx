@@ -2,18 +2,39 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Activity, BarChart3, FlaskConical, BookOpen,
-  Bell, Settings, ChevronLeft, ChevronRight, Zap, TrendingUp, Menu, X, Radar
+  Bell, Settings, ChevronLeft, ChevronRight, Zap, TrendingUp, Menu, X, Radar,
+  Grid3x3, Globe, Coins, Bookmark, Calendar, History, BookOpenCheck,
+  BellRing, Blocks, Target, Layers, ListOrdered, Crosshair, Briefcase, ClipboardList,
+  Database, Gauge, Heart
 } from 'lucide-react';
+import PriceTicker from '@/components/dashboard/PriceTicker';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/scanner', label: 'Scanner', icon: Radar },
   { path: '/signals', label: 'Signals', icon: Zap },
+  { path: '/signal-queue', label: 'Signal Queue', icon: ListOrdered },
   { path: '/strategies', label: 'Strategies', icon: Activity },
+  { path: '/strategy-builder', label: 'Strategy Builder', icon: Blocks },
   { path: '/backtest', label: 'Backtest', icon: FlaskConical },
   { path: '/paper-trading', label: 'Paper Trading', icon: BookOpen },
+  { path: '/journal', label: 'Trade Journal', icon: ClipboardList },
   { path: '/analytics', label: 'Analytics', icon: BarChart3 },
+  { path: '/accuracy', label: 'Accuracy', icon: Target },
+  { path: '/probability', label: 'Probability', icon: Crosshair },
+  { path: '/correlation', label: 'Correlation & Heat', icon: Grid3x3 },
+  { path: '/currency-strength', label: 'Currency Strength', icon: Coins },
+  { path: '/sessions', label: 'Sessions', icon: Globe },
+  { path: '/economic-calendar', label: 'Economic Calendar', icon: Calendar },
+  { path: '/watchlists', label: 'Watchlists', icon: Bookmark },
+  { path: '/support-resistance', label: 'S&R / Liquidity', icon: Layers },
+  { path: '/replay', label: 'Replay Mode', icon: History },
+  { path: '/portfolio', label: 'Portfolio', icon: Briefcase },
+  { path: '/alert-builder', label: 'Alert Builder', icon: BellRing },
   { path: '/notifications', label: 'Notifications', icon: Bell },
+  { path: '/data-quality', label: 'Data Quality', icon: Database },
+  { path: '/performance', label: 'Performance', icon: Gauge },
+  { path: '/system-health', label: 'System Health', icon: Heart },
   { path: '/settings', label: 'Settings', icon: Settings },
 ];
 
@@ -83,6 +104,9 @@ export default function DashboardLayout() {
 
       {/* Main */}
       <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Price ticker */}
+        <PriceTicker />
+
         {/* Top bar */}
         <header className="h-14 flex items-center justify-between px-4 border-b border-border bg-[hsl(220,18%,8%)] flex-shrink-0">
           <button onClick={() => setMobileOpen(true)} className="lg:hidden p-1.5 rounded-lg hover:bg-secondary">

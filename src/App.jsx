@@ -24,6 +24,23 @@ import PaperTrading from '@/pages/PaperTrading';
 import Analytics from '@/pages/Analytics';
 import Notifications from '@/pages/Notifications';
 import SettingsPage from '@/pages/SettingsPage';
+import CorrelationHeatMap from '@/pages/CorrelationHeatMap';
+import SessionIntelligence from '@/pages/SessionIntelligence';
+import CurrencyStrength from '@/pages/CurrencyStrength';
+import SmartWatchlists from '@/pages/SmartWatchlists';
+import EconomicCalendar from '@/pages/EconomicCalendar';
+import ReplayMode from '@/pages/ReplayMode';
+import TradeJournal from '@/pages/TradeJournal';
+import AlertBuilder from '@/pages/AlertBuilder';
+import StrategyBuilder from '@/pages/StrategyBuilder';
+import ProbabilityDashboard from '@/pages/ProbabilityDashboard';
+import SupportResistance from '@/pages/SupportResistance';
+import SignalQueue from '@/pages/SignalQueue';
+import AccuracyDashboard from '@/pages/AccuracyDashboard';
+import PortfolioExposure from '@/pages/PortfolioExposure';
+import DataQualityMonitor from '@/pages/DataQualityMonitor';
+import PerformanceOptimizer from '@/pages/PerformanceOptimizer';
+import SystemHealth from '@/pages/SystemHealth';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -67,6 +84,23 @@ const AuthenticatedApp = () => {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/correlation" element={<CorrelationHeatMap />} />
+          <Route path="/sessions" element={<SessionIntelligence />} />
+          <Route path="/currency-strength" element={<CurrencyStrength />} />
+          <Route path="/watchlists" element={<SmartWatchlists />} />
+          <Route path="/economic-calendar" element={<EconomicCalendar />} />
+          <Route path="/replay" element={<ReplayMode />} />
+          <Route path="/journal" element={<TradeJournal />} />
+          <Route path="/alert-builder" element={<AlertBuilder />} />
+          <Route path="/strategy-builder" element={<StrategyBuilder />} />
+          <Route path="/probability" element={<ProbabilityDashboard />} />
+          <Route path="/support-resistance" element={<SupportResistance />} />
+          <Route path="/signal-queue" element={<SignalQueue />} />
+          <Route path="/accuracy" element={<AccuracyDashboard />} />
+          <Route path="/portfolio" element={<PortfolioExposure />} />
+          <Route path="/data-quality" element={<DataQualityMonitor />} />
+          <Route path="/performance" element={<PerformanceOptimizer />} />
+          <Route path="/system-health" element={<SystemHealth />} />
         </Route>
       </Route>
 
