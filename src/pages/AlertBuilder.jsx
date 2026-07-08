@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { generateSampleAlerts, ALERT_CONDITIONS } from '@/lib/advancedTools';
 import { DEFAULT_INSTRUMENTS } from '@/lib/constants';
 import { Bell, Plus, Trash2, Zap } from 'lucide-react';

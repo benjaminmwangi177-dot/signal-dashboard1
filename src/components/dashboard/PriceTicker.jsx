@@ -4,7 +4,6 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 
 export default function PriceTicker() {
   const [prices, setPrices] = useState(() => generateLivePrices());
-  const [offset, setOffset] = useState(0);
 
   // Update prices periodically
   useEffect(() => {
@@ -18,19 +17,13 @@ export default function PriceTicker() {
     return () => clearInterval(interval);
   }, []);
 
-  // Scrolling animation
-  useEffect(() => {
-    const scroll = setInterval(() => setOffset(o => o - 1), 50);
-    return () => clearInterval(scroll);
-  }, []);
-
   const displayPrices = useMemo(() => [...prices, ...prices], [prices]);
 
   return (
-    <div className="relative overflow-hidden h-7 bg-[hsl(220,18%,6%)] border-b border-border">
-      <div className="absolute flex items-center gap-6 whitespace-nowrap" style={{ transform: `translateX(${offset}px)` }}>
+    <div className="relative overflow-hidden h-7 bg-[hsl(220,18%,6%)] border-b border-border flex items-center">
+      <div className="flex items-center gap-8 whitespace-nowrap animate-ticker">
         {displayPrices.map((p, i) => (
-          <div key={i} className="flex items-center gap-1.5 text-[11px] font-mono">
+          <div key={i} className="flex items-center gap-1.5 text-[11px] font-mono px-4 border-r border-border/30 last:border-0">
             <span className="text-muted-foreground font-bold">{p.symbol}</span>
             <span className="text-foreground">{p.price}</span>
             <span className={`flex items-center gap-0.5 ${p.change_pct >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>

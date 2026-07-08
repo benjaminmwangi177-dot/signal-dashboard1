@@ -2,60 +2,103 @@ import React, { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Activity, BarChart3, FlaskConical, BookOpen,
-  Bell, Settings, ChevronLeft, ChevronRight, Zap, TrendingUp, Menu, X, Radar,
+  Bell, Settings, ChevronLeft, ChevronRight, Zap, TrendingUp, Menu, Radar,
   Grid3x3, Globe, Coins, Bookmark, Calendar, History, BookOpenCheck,
   BellRing, Blocks, Target, Layers, ListOrdered, Crosshair, Briefcase, ClipboardList,
   Database, Gauge, Heart, MessageSquare, Sparkles, Waves,
-  Sigma, Shield, GitCompare, Brain, CandlestickChart, Download, Wallet
+  Sigma, Shield, GitCompare, Brain, CandlestickChart, Download, Wallet, ChevronDown
 } from 'lucide-react';
 import PriceTicker from '@/components/dashboard/PriceTicker';
 
-const NAV_ITEMS = [
-  { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/scanner', label: 'Scanner', icon: Radar },
-  { path: '/signals', label: 'Signals', icon: Zap },
-  { path: '/signal-queue', label: 'Signal Queue', icon: ListOrdered },
-  { path: '/strategies', label: 'Strategies', icon: Activity },
-  { path: '/strategy-builder', label: 'Strategy Builder', icon: Blocks },
-  { path: '/backtest', label: 'Backtest', icon: FlaskConical },
-  { path: '/paper-trading', label: 'Paper Trading', icon: BookOpen },
-  { path: '/account', label: 'Account & Balance', icon: Wallet },
-  { path: '/journal', label: 'Trade Journal', icon: ClipboardList },
-  { path: '/analytics', label: 'Analytics', icon: BarChart3 },
-  { path: '/accuracy', label: 'Accuracy', icon: Target },
-  { path: '/probability', label: 'Probability', icon: Crosshair },
-  { path: '/correlation', label: 'Correlation & Heat', icon: Grid3x3 },
-  { path: '/currency-strength', label: 'Currency Strength', icon: Coins },
-  { path: '/sessions', label: 'Sessions', icon: Globe },
-  { path: '/economic-calendar', label: 'Economic Calendar', icon: Calendar },
-  { path: '/watchlists', label: 'Watchlists', icon: Bookmark },
-  { path: '/support-resistance', label: 'S&R / Liquidity', icon: Layers },
-  { path: '/replay', label: 'Replay Mode', icon: History },
-  { path: '/portfolio', label: 'Portfolio', icon: Briefcase },
-  { path: '/alert-builder', label: 'Alert Builder', icon: BellRing },
-  { path: '/notifications', label: 'Notifications', icon: Bell },
-  { path: '/data-quality', label: 'Data Quality', icon: Database },
-  { path: '/performance', label: 'Performance', icon: Gauge },
-  { path: '/system-health', label: 'System Health', icon: Heart },
-  { path: '/ai-commentary', label: 'AI Commentary', icon: MessageSquare },
-  { path: '/ai-research', label: 'AI Research', icon: Sparkles },
-  { path: '/volatility', label: 'Volatility Intel', icon: Waves },
-  { path: '/statistical', label: 'Statistical Engine', icon: Sigma },
-  { path: '/risk-metrics', label: 'Risk Metrics', icon: Shield },
-  { path: '/strategy-comparison', label: 'Strategy Lab', icon: GitCompare },
-  { path: '/knowledge-base', label: 'Knowledge Base', icon: BookOpenCheck },
-  { path: '/explainability', label: 'Explainability', icon: Brain },
-  { path: '/signal-intelligence', label: 'Signal Intel DB', icon: Database },
-  { path: '/microstructure', label: 'Microstructure', icon: Layers },
-  { path: '/data-export', label: 'Data Export', icon: Download },
-  { path: '/tradingview', label: 'TradingView Charts', icon: CandlestickChart },
-  { path: '/settings', label: 'Settings', icon: Settings },
+const NAV_GROUPS = [
+  {
+    label: 'Core',
+    items: [
+      { path: '/', label: 'Dashboard', icon: LayoutDashboard },
+      { path: '/signals', label: 'Signal Log', icon: Zap },
+      { path: '/signal-queue', label: 'Signal Queue', icon: ListOrdered },
+    ]
+  },
+  {
+    label: 'Trading',
+    items: [
+      { path: '/scanner', label: 'Market Scanner', icon: Radar },
+      { path: '/strategies', label: 'Strategies', icon: Activity },
+      { path: '/strategy-builder', label: 'Strategy Builder', icon: Blocks },
+      { path: '/backtest', label: 'Backtest', icon: FlaskConical },
+      { path: '/paper-trading', label: 'Paper Trading', icon: BookOpen },
+      { path: '/account', label: 'Account & Balance', icon: Wallet },
+      { path: '/journal', label: 'Trade Journal', icon: ClipboardList },
+      { path: '/portfolio', label: 'Portfolio', icon: Briefcase },
+    ]
+  },
+  {
+    label: 'Market Intel',
+    items: [
+      { path: '/watchlists', label: 'Smart Watchlists', icon: Bookmark },
+      { path: '/sessions', label: 'Session Intel', icon: Globe },
+      { path: '/economic-calendar', label: 'Economic Calendar', icon: Calendar },
+      { path: '/support-resistance', label: 'S&R / Liquidity', icon: Layers },
+      { path: '/replay', label: 'Replay Mode', icon: History },
+      { path: '/alert-builder', label: 'Alert Builder', icon: BellRing },
+    ]
+  },
+  {
+    label: 'Analysis',
+    items: [
+      { path: '/analytics', label: 'Performance Analytics', icon: BarChart3 },
+      { path: '/accuracy', label: 'Strategy Accuracy', icon: Target },
+      { path: '/probability', label: 'Probability', icon: Crosshair },
+      { path: '/correlation', label: 'Correlation Heatmap', icon: Grid3x3 },
+      { path: '/currency-strength', label: 'Currency Strength', icon: Coins },
+      { path: '/volatility', label: 'Volatility Intel', icon: Waves },
+      { path: '/statistical', label: 'Statistical Engine', icon: Sigma },
+      { path: '/risk-metrics', label: 'Risk Metrics', icon: Shield },
+    ]
+  },
+  {
+    label: 'AI & Tools',
+    items: [
+      { path: '/ai-commentary', label: 'AI Commentary', icon: MessageSquare },
+      { path: '/ai-research', label: 'AI Research', icon: Sparkles },
+      { path: '/signal-intelligence', label: 'Signal Intel DB', icon: Database },
+      { path: '/explainability', label: 'Explainability', icon: Brain },
+      { path: '/microstructure', label: 'Microstructure', icon: Layers },
+      { path: '/strategy-comparison', label: 'Strategy Lab', icon: GitCompare },
+      { path: '/knowledge-base', label: 'Knowledge Base', icon: BookOpenCheck },
+      { path: '/tradingview', label: 'TradingView', icon: CandlestickChart },
+      { path: '/data-export', label: 'Data Export', icon: Download },
+    ]
+  },
+  {
+    label: 'System',
+    items: [
+      { path: '/notifications', label: 'Notifications', icon: Bell },
+      { path: '/data-quality', label: 'Data Quality', icon: Database },
+      { path: '/performance', label: 'System Performance', icon: Gauge },
+      { path: '/system-health', label: 'System Health', icon: Heart },
+      { path: '/settings', label: 'Settings', icon: Settings },
+    ]
+  },
 ];
 
 export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openGroups, setOpenGroups] = useState({
+    Core: true,
+    Trading: true,
+    'Market Intel': false,
+    Analysis: false,
+    'AI & Tools': false,
+    System: false
+  });
+
   const location = useLocation();
+
+  const toggleGroup = (groupLabel) => {
+    setOpenGroups(prev => ({ ...prev, [groupLabel]: !prev[groupLabel] }));
+  };
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
@@ -68,7 +111,7 @@ export default function DashboardLayout() {
       <aside className={`
         fixed lg:relative z-50 h-full flex flex-col border-r border-border bg-[hsl(220,18%,8%)]
         transition-all duration-300 ease-out
-        ${collapsed ? 'w-16' : 'w-56'}
+        ${collapsed ? 'w-16' : 'w-64'}
         ${mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Logo */}
@@ -84,27 +127,45 @@ export default function DashboardLayout() {
         </div>
 
         {/* Nav */}
-        <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
-          {NAV_ITEMS.map(item => {
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setMobileOpen(false)}
-                className={`
-                  flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all
-                  ${isActive
-                    ? 'bg-emerald-500/10 text-emerald-400'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
-                  }
-                `}
-              >
-                <item.icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-emerald-400' : ''}`} />
-                {!collapsed && <span className="truncate">{item.label}</span>}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 py-3 px-2 space-y-4 overflow-y-auto">
+          {NAV_GROUPS.map(group => (
+            <div key={group.label} className="space-y-1">
+              {!collapsed && (
+                <button
+                  onClick={() => toggleGroup(group.label)}
+                  className="w-full flex items-center justify-between px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 hover:text-foreground transition-colors"
+                >
+                  {group.label}
+                  {openGroups[group.label] ? <ChevronDown className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                </button>
+              )}
+
+              {(openGroups[group.label] || collapsed) && (
+                <div className="space-y-0.5">
+                  {group.items.map(item => {
+                    const isActive = location.pathname === item.path;
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setMobileOpen(false)}
+                        className={`
+                          flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all
+                          ${isActive
+                            ? 'bg-emerald-500/10 text-emerald-400'
+                            : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
+                          }
+                        `}
+                      >
+                        <item.icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-emerald-400' : ''}`} />
+                        {!collapsed && <span className="truncate">{item.label}</span>}
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ))}
         </nav>
 
         {/* Collapse toggle */}

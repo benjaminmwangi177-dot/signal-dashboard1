@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { analyzeInstrument, generateSignalExplanation } from '@/lib/signalEngine';
 import { computeInstitutionalConfidence } from '@/lib/confidenceEngine';
 import { calculateStrength } from '@/lib/strengthMeter';
-import { DEFAULT_INSTRUMENTS, STRATEGIES, RISK_COLORS } from '@/lib/constants';
+import { DEFAULT_INSTRUMENTS, STRATEGIES } from '@/lib/constants';
 import SignalBadge from '@/components/dashboard/SignalBadge';
 import ConfidenceMeter from '@/components/dashboard/ConfidenceMeter';
 import TimeframeBar from '@/components/dashboard/TimeframeBar';
@@ -12,7 +12,7 @@ import RegimeBadge from '@/components/dashboard/RegimeBadge';
 import StrengthMeter from '@/components/dashboard/StrengthMeter';
 import ConsensusMatrix from '@/components/dashboard/ConsensusMatrix';
 import InstitutionalConfidencePanel from '@/components/dashboard/InstitutionalConfidencePanel';
-import { ArrowLeft, Zap, Brain, Loader2, Activity, Gauge } from 'lucide-react';
+import { ArrowLeft, Brain, Loader2, Activity, Gauge } from 'lucide-react';
 
 export default function InstrumentDetail() {
   const { symbol } = useParams();

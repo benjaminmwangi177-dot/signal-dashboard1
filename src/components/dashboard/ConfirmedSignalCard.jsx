@@ -11,7 +11,7 @@ export default function ConfirmedSignalCard({ analysis, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="signal-confirmed-glow w-full text-left rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-amber-500/0 p-4 hover:from-amber-500/10 transition-all group"
+      className="signal-confirmed-glow w-full text-left rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-amber-500/0 p-4 hover:from-amber-500/10 transition-all group glass glass-hover"
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
