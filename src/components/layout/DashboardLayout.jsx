@@ -6,7 +6,7 @@ import {
   Grid3x3, Globe, Coins, Bookmark, Calendar, History, BookOpenCheck,
   BellRing, Blocks, Target, Layers, ListOrdered, Crosshair, Briefcase, ClipboardList,
   Database, Gauge, Heart, MessageSquare, Sparkles, Waves,
-  Sigma, Shield, GitCompare, Brain, CandlestickChart, Download
+  Sigma, Shield, GitCompare, Brain, CandlestickChart, Download, Wallet
 } from 'lucide-react';
 import PriceTicker from '@/components/dashboard/PriceTicker';
 
@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { path: '/strategy-builder', label: 'Strategy Builder', icon: Blocks },
   { path: '/backtest', label: 'Backtest', icon: FlaskConical },
   { path: '/paper-trading', label: 'Paper Trading', icon: BookOpen },
+  { path: '/account', label: 'Account & Balance', icon: Wallet },
   { path: '/journal', label: 'Trade Journal', icon: ClipboardList },
   { path: '/analytics', label: 'Analytics', icon: BarChart3 },
   { path: '/accuracy', label: 'Accuracy', icon: Target },

@@ -53,6 +53,7 @@ import SignalIntelligenceDB from '@/pages/SignalIntelligenceDB';
 import Microstructure from '@/pages/Microstructure';
 import DataExport from '@/pages/DataExport';
 import TradingViewCharts from '@/pages/TradingViewCharts';
+import AccountBalance from '@/pages/AccountBalance';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -93,6 +94,7 @@ const AuthenticatedApp = () => {
           <Route path="/strategies" element={<Strategies />} />
           <Route path="/backtest" element={<Backtest />} />
           <Route path="/paper-trading" element={<PaperTrading />} />
+          <Route path="/account" element={<AccountBalance />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<SettingsPage />} />
