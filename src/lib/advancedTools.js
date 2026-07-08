@@ -28,16 +28,38 @@ export const TRADING_SESSIONS = [
 ];
 
 export function getSessionIntelligence() {
-  const hour = new Date().getUTCHours();
+  const now = new Date();
+  const hour = now.getUTCHours();
+  const minute = now.getUTCMinutes();
+  const currentMinutes = hour * 60 + minute;
+
   const sessions = TRADING_SESSIONS.map(s => {
     const active = s.start < s.end
       ? hour >= s.start && hour < s.end
       : hour >= s.start || hour < s.end;
-    return { ...s, active, current_hour: hour };
+
+    // Minutes until open / close (handles overnight wrap)
+    const startMin = s.start * 60;
+    const endMin = s.end * 60;
+    let toOpen = startMin - currentMinutes;
+    if (toOpen < 0) toOpen += 1440;
+    if (active) toOpen = 0;
+    let toClose = endMin - currentMinutes;
+    if (toClose <= 0) toClose += 1440;
+    if (!active) toClose = 0;
+
+    return {
+      ...s,
+      active,
+      current_hour: hour,
+      minutes_to_open: active ? 0 : Math.round(toOpen),
+      minutes_to_close: active ? Math.round(toClose) : 0,
+      progress: active ? Math.round(((currentMinutes - startMin + (currentMinutes < startMin ? 1440 : 0)) / ((endMin - startMin + 1440) % 1440)) * 100) : 0,
+    };
   });
   const active = sessions.filter(s => s.active);
   const isOverlap = active.length >= 2;
-  return { sessions, active, isOverlap, currentHour: hour };
+  return { sessions, active, isOverlap, currentHour: hour, currentMinutes };
 }
 
 export function getSessionStats(symbol) {
@@ -47,7 +69,49 @@ export function getSessionStats(symbol) {
     pip_range: 20 + ((hash + s.start) % 80),
     win_rate: 45 + ((hash * s.start) % 40),
     trade_count: 5 + ((hash + s.end) % 20),
+    avg_volume: Math.round(60 + ((hash * s.start) % 40)),
+    volatility: Math.round(30 + ((hash + s.end) % 70)),
   }));
+}
+
+// Hourly volume & volatility pattern within each session
+export function getSessionVolumeVolatility() {
+  return TRADING_SESSIONS.map(s => {
+    const hours = [];
+    const span = s.start < s.end ? s.end - s.start : (s.end + 24 - s.start);
+    for (let i = 0; i < span; i++) {
+      const h = (s.start + i) % 24;
+      const hash = (s.key.charCodeAt(0) * (h + 3)) % 100;
+      hours.push({
+        hour: h,
+        volume: Math.round(40 + (hash % 60)),
+        volatility: Math.round(30 + ((hash * 7) % 70)),
+      });
+    }
+    const peakHour = hours.reduce((a, b) => (b.volume > a.volume ? b : a), hours[0]);
+    return { ...s, hours, peak_hour: peakHour.hour, avg_volume: Math.round(hours.reduce((s2, x) => s2 + x.volume, 0) / hours.length), avg_volatility: Math.round(hours.reduce((s2, x) => s2 + x.volatility, 0) / hours.length) };
+  });
+}
+
+// Aggregate historical performance per session across instruments
+export function getHistoricalSessionPerformance() {
+  return TRADING_SESSIONS.map(s => {
+    const hash = s.key.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const total = 120 + (hash % 300);
+    const wins = Math.round(total * (0.48 + (hash % 28) / 100));
+    const bestInst = DEFAULT_INSTRUMENTS[hash % DEFAULT_INSTRUMENTS.length];
+    return {
+      ...s,
+      total_trades: total,
+      wins,
+      win_rate: Math.round((wins / total) * 1000) / 10,
+      avg_pips: 15 + (hash % 60),
+      avg_hold_min: 45 + (hash % 180),
+      best_instrument: bestInst,
+      peak_hour: (s.start + 2) % 24,
+      volatility_rating: s.vol,
+    };
+  });
 }
 
 // ─── 3. HEAT MAPS ───
