@@ -5,7 +5,8 @@ import {
   Bell, Settings, ChevronLeft, ChevronRight, Zap, TrendingUp, Menu, X, Radar,
   Grid3x3, Globe, Coins, Bookmark, Calendar, History, BookOpenCheck,
   BellRing, Blocks, Target, Layers, ListOrdered, Crosshair, Briefcase, ClipboardList,
-  Database, Gauge, Heart
+  Database, Gauge, Heart, MessageSquare, Sparkles, Waves,
+  Sigma, Shield, GitCompare, Brain, CandlestickChart, Download
 } from 'lucide-react';
 import PriceTicker from '@/components/dashboard/PriceTicker';
 
@@ -35,6 +36,18 @@ const NAV_ITEMS = [
   { path: '/data-quality', label: 'Data Quality', icon: Database },
   { path: '/performance', label: 'Performance', icon: Gauge },
   { path: '/system-health', label: 'System Health', icon: Heart },
+  { path: '/ai-commentary', label: 'AI Commentary', icon: MessageSquare },
+  { path: '/ai-research', label: 'AI Research', icon: Sparkles },
+  { path: '/volatility', label: 'Volatility Intel', icon: Waves },
+  { path: '/statistical', label: 'Statistical Engine', icon: Sigma },
+  { path: '/risk-metrics', label: 'Risk Metrics', icon: Shield },
+  { path: '/strategy-comparison', label: 'Strategy Lab', icon: GitCompare },
+  { path: '/knowledge-base', label: 'Knowledge Base', icon: BookOpenCheck },
+  { path: '/explainability', label: 'Explainability', icon: Brain },
+  { path: '/signal-intelligence', label: 'Signal Intel DB', icon: Database },
+  { path: '/microstructure', label: 'Microstructure', icon: Layers },
+  { path: '/data-export', label: 'Data Export', icon: Download },
+  { path: '/tradingview', label: 'TradingView Charts', icon: CandlestickChart },
   { path: '/settings', label: 'Settings', icon: Settings },
 ];
 

@@ -41,6 +41,18 @@ import PortfolioExposure from '@/pages/PortfolioExposure';
 import DataQualityMonitor from '@/pages/DataQualityMonitor';
 import PerformanceOptimizer from '@/pages/PerformanceOptimizer';
 import SystemHealth from '@/pages/SystemHealth';
+import AICommentary from '@/pages/AICommentary';
+import AIResearchAssistant from '@/pages/AIResearchAssistant';
+import VolatilityIntelligence from '@/pages/VolatilityIntelligence';
+import StatisticalEngine from '@/pages/StatisticalEngine';
+import RiskMetrics from '@/pages/RiskMetrics';
+import StrategyComparison from '@/pages/StrategyComparison';
+import KnowledgeBase from '@/pages/KnowledgeBase';
+import Explainability from '@/pages/Explainability';
+import SignalIntelligenceDB from '@/pages/SignalIntelligenceDB';
+import Microstructure from '@/pages/Microstructure';
+import DataExport from '@/pages/DataExport';
+import TradingViewCharts from '@/pages/TradingViewCharts';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -101,6 +113,18 @@ const AuthenticatedApp = () => {
           <Route path="/data-quality" element={<DataQualityMonitor />} />
           <Route path="/performance" element={<PerformanceOptimizer />} />
           <Route path="/system-health" element={<SystemHealth />} />
+          <Route path="/ai-commentary" element={<AICommentary />} />
+          <Route path="/ai-research" element={<AIResearchAssistant />} />
+          <Route path="/volatility" element={<VolatilityIntelligence />} />
+          <Route path="/statistical" element={<StatisticalEngine />} />
+          <Route path="/risk-metrics" element={<RiskMetrics />} />
+          <Route path="/strategy-comparison" element={<StrategyComparison />} />
+          <Route path="/knowledge-base" element={<KnowledgeBase />} />
+          <Route path="/explainability" element={<Explainability />} />
+          <Route path="/signal-intelligence" element={<SignalIntelligenceDB />} />
+          <Route path="/microstructure" element={<Microstructure />} />
+          <Route path="/data-export" element={<DataExport />} />
+          <Route path="/tradingview" element={<TradingViewCharts />} />
         </Route>
       </Route>
 

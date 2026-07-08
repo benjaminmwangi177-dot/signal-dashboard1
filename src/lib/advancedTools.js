@@ -441,6 +441,258 @@ export function getSystemHealth() {
   };
 }
 
+// ─── 18. AI MARKET COMMENTARY ───
+export function generateMarketCommentary(instruments = DEFAULT_INSTRUMENTS) {
+  const topInst = instruments.slice(0, 5).map(i => {
+    const ic = computeInstitutionalConfidence(i.symbol, i.name, i.asset_class, '1h');
+    return { ...i, ic, regime: detectRegime(i.symbol) };
+  });
+  return topInst.map(inst => {
+    const dir = inst.ic.final_direction;
+    const conf = inst.ic.institutional_confidence;
+    const regime = inst.regime.label;
+    const dirText = dir === 'BUY' ? 'bullish' : dir === 'SELL' ? 'bearish' : 'neutral';
+    return {
+      symbol: inst.symbol,
+      name: inst.name,
+      commentary: `${inst.name} (${inst.symbol}) remains ${dirText} on the 1-hour timeframe. Price is in a ${regime.toLowerCase()} regime with ${conf}% institutional confidence. ${inst.ic.agreement} strategies agree on the current direction. Expected move is ${inst.ic.expected_move_atr} ATR with an estimated holding time of ${inst.ic.expected_holding_time}. Signal grade: ${inst.ic.grade.grade}.`,
+      direction: dir,
+      confidence: conf,
+      regime,
+      grade: inst.ic.grade.grade,
+    };
+  });
+}
+
+// ─── 22. VOLATILITY INTELLIGENCE ───
+export function getVolatilityIntelligence(instruments = DEFAULT_INSTRUMENTS) {
+  return instruments.map(i => {
+    const hash = i.symbol.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const hour = new Date().getHours();
+    const atrPct = 0.3 + ((hash % 40) / 10);
+    const atrPercentile = Math.round(20 + (hash * 3 % 70));
+    const histVol = Math.round(15 + (hash % 60));
+    const impliedVol = Math.round(20 + (hash * 2 % 50));
+    const dailyRange = Math.round((atrPct * 10) * 10) / 10;
+    const regime = atrPercentile > 70 ? 'expansion' : atrPercentile < 30 ? 'compression' : 'normal';
+    return {
+      ...i,
+      atr_percent: Math.round(atrPct * 100) / 100,
+      atr_percentile: atrPercentile,
+      historical_volatility: histVol,
+      implied_volatility: impliedVol,
+      expected_daily_range: dailyRange,
+      vol_regime: regime,
+      expansion_alert: atrPercentile > 75,
+      compression_alert: atrPercentile < 25,
+    };
+  });
+}
+
+// ─── 23. STATISTICAL ENGINE ───
+export function getStatisticalAnalysis(instruments = DEFAULT_INSTRUMENTS) {
+  return instruments.map(i => {
+    const hash = i.symbol.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const zScore = Math.round(((hash % 100) - 50) / 10 * 10) / 10;
+    const meanRevProb = Math.round(40 + (hash % 50));
+    const cointegration = Math.round(30 + (hash * 3 % 60));
+    const dayOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((d, idx) => ({
+      day: d,
+      win_rate: Math.round(40 + ((hash * (idx + 1)) % 50)),
+      avg_move: Math.round(20 + ((hash * (idx + 2)) % 80)),
+    }));
+    const monthStats = ['Jan', 'Apr', 'Jul', 'Oct'].map((m, idx) => ({
+      month: m,
+      performance: Math.round((hash * (idx + 1) % 200) - 100),
+      win_rate: Math.round(40 + ((hash * (idx + 3)) % 50)),
+    }));
+    return {
+      ...i,
+      z_score: zScore,
+      mean_reversion_prob: meanRevProb,
+      cointegration_score: cointegration,
+      day_of_week: dayOfWeek,
+      monthly_stats: monthStats,
+      seasonal_tendency: hash % 2 === 0 ? 'Bullish' : 'Bearish',
+    };
+  });
+}
+
+// ─── 24. ADVANCED RISK METRICS ───
+export function getAdvancedRiskMetrics(instruments = DEFAULT_INSTRUMENTS) {
+  return instruments.map(i => {
+    const hash = i.symbol.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const mfe = Math.round(20 + (hash % 180));
+    const mae = Math.round(10 + (hash % 80));
+    const expectedPayoff = Math.round((hash % 200 - 50) * 10) / 10;
+    const kelly = Math.round(Math.max(0, (hash % 40) / 100) * 100) / 100;
+    const recoveryFactor = Math.round((1 + (hash % 50) / 10) * 10) / 10;
+    const calmar = Math.round((0.5 + (hash % 30) / 10) * 10) / 10;
+    const sortino = Math.round((0.5 + (hash % 25) / 10) * 10) / 10;
+    const ulcerIndex = Math.round((hash % 20) * 10) / 10;
+    return {
+      ...i,
+      mfe: mfe,
+      mae: mae,
+      expected_payoff: expectedPayoff,
+      kelly_criterion: kelly,
+      recovery_factor: recoveryFactor,
+      calmar_ratio: calmar,
+      sortino_ratio: sortino,
+      ulcer_index: ulcerIndex,
+    };
+  });
+}
+
+// ─── 25. STRATEGY COMPARISON LAB ───
+export function compareStrategies() {
+  return STRATEGIES.map(s => {
+    const hash = s.key.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    const accuracy = Math.round((45 + (hash % 40)) * 10) / 10;
+    const profitFactor = Math.round((1 + (hash % 15) / 10) * 100) / 100;
+    const avgMove = Math.round(15 + (hash % 80));
+    const falsePositiveRate = Math.round(15 + (hash % 35));
+    return {
+      ...s,
+      accuracy: accuracy,
+      profit_factor: profitFactor,
+      avg_move_after_signal: avgMove,
+      false_positive_rate: falsePositiveRate,
+      trending_perf: Math.round(40 + (hash % 50)),
+      ranging_perf: Math.round(35 + (hash * 2 % 45)),
+      volatile_perf: Math.round(30 + (hash * 3 % 50)),
+    };
+  });
+}
+
+// ─── 26. SIGNAL INTELLIGENCE DATABASE ───
+export function getSignalIntelligenceDB(instruments = DEFAULT_INSTRUMENTS) {
+  const records = [];
+  instruments.forEach(inst => {
+    const hash = inst.symbol.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    for (let i = 0; i < 3; i++) {
+      const ic = computeInstitutionalConfidence(inst.symbol, inst.name, inst.asset_class, '1h');
+      const r = (hash * (i + 3)) % 100;
+      const session = TRADING_SESSIONS[(hash + i) % TRADING_SESSIONS.length];
+      records.push({
+        id: `${inst.symbol}-${i}`,
+        symbol: inst.symbol,
+        name: inst.name,
+        asset_class: inst.asset_class,
+        direction: r > 55 ? 'BUY' : r > 25 ? 'SELL' : 'NEUTRAL',
+        confidence: ic.institutional_confidence,
+        regime: ic.regime.label,
+        session: session.label,
+        strategies_agreeing: ic.agreement,
+        grade: ic.grade.grade,
+        outcome: r > 65 ? 'win' : r > 40 ? 'loss' : 'breakeven',
+        pnl_pips: Math.round((r - 50) * 3),
+        duration_min: 30 + (hash % 300),
+        timestamp: new Date(Date.now() - i * 3600000 - hash * 60000).toISOString(),
+      });
+    }
+  });
+  return records;
+}
+
+// ─── 27. EXPLAINABILITY DATA ───
+export function getExplainabilityData(symbol) {
+  const ic = computeInstitutionalConfidence(symbol, '', 'forex', '1h');
+  return {
+    symbol,
+    final_direction: ic.final_direction,
+    institutional_confidence: ic.institutional_confidence,
+    grade: ic.grade,
+    regime: ic.regime,
+    strategy_contributions: ic.weighted_votes.map(v => ({
+      strategy: v.strategy_name,
+      short_name: v.short_name,
+      direction: v.direction,
+      confidence: v.confidence,
+      weight_pct: v.weight_pct,
+      contribution: Math.round(v.weight_pct * (v.direction === ic.final_direction ? 1 : -0.5) * 10) / 10,
+    })),
+    confidence_breakdown: {
+      strategy_agreement: Math.round(ic.institutional_confidence * 0.4 * 10) / 10,
+      data_quality: Math.round(ic.data_quality * 0.2 * 10) / 10,
+      regime_fit: Math.round(ic.institutional_confidence * 0.25 * 10) / 10,
+      volatility_factor: Math.round(ic.institutional_confidence * 0.15 * 10) / 10,
+    },
+  };
+}
+
+// ─── 28. MARKET MICROSTRUCTURE ───
+export function getMicrostructureData(instruments = DEFAULT_INSTRUMENTS) {
+  return instruments.slice(0, 12).map(i => {
+    const hash = i.symbol.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+    return {
+      ...i,
+      cvd: Math.round((hash % 200) - 100),
+      delta_volume: Math.round((hash * 3 % 100) - 50),
+      buy_pressure: Math.round(40 + (hash % 50)),
+      sell_pressure: Math.round(40 + (hash * 2 % 50)),
+      absorption: hash % 4 === 0,
+      iceberg_detected: hash % 5 === 0,
+      footprint_imbalance: Math.round((hash % 100) - 50),
+    };
+  });
+}
+
+// ─── 29. KNOWLEDGE BASE ───
+export const KNOWLEDGE_BASE = [
+  {
+    category: 'Smart Money Concepts',
+    icon: 'Briefcase',
+    articles: [
+      { title: 'Break of Structure (BOS)', content: 'A Break of Structure occurs when price breaks beyond a previous swing high (bullish BOS) or swing low (bearish BOS), confirming continuation of the current trend. It signals that the institutional order flow is aligned with the trend direction.' },
+      { title: 'Change of Character (CHOCH)', content: 'A Change of Character is the first sign of a potential trend reversal. It occurs when price breaks the last lower high (bullish CHOCH) or higher low (bearish CHOCH) in the opposite direction of the prior trend.' },
+      { title: 'Order Blocks', content: 'Order Blocks are the last opposing candle before a strong directional move. They represent areas where institutions placed large orders. Price often returns to these zones before continuing in the trend direction.' },
+      { title: 'Fair Value Gap (FVG)', content: 'A Fair Value Gap is a three-candle imbalance where the wicks of candle 1 and candle 3 do not overlap, leaving a gap. This gap often acts as a magnet for price and provides high-probability entry zones.' },
+      { title: 'Liquidity Sweeps', content: 'A liquidity sweep occurs when price briefly moves beyond a key level (swing high/low, equal highs/lows) to trigger stop orders, then reverses. This is a classic institutional tactic to fill large orders.' },
+    ],
+  },
+  {
+    category: 'ICT Concepts',
+    icon: 'Zap',
+    articles: [
+      { title: 'Kill Zones', content: 'ICT Kill Zones are specific time windows when institutional activity is highest: London Kill Zone (2-5 AM EST), New York Kill Zone (7-10 AM EST), and London Close Kill Zone (10 AM - 12 PM EST).' },
+      { title: 'Optimal Trade Entry (OTE)', content: 'The OTE is a Fibonacci-based entry zone between the 62% and 79% retracement of a recent impulse leg. It provides a high-probability entry with tight stop placement.' },
+      { title: 'Judas Swing', content: 'The Judas Swing is a false move at the open of a session designed to trap traders. Price moves in one direction to grab liquidity, then reverses in the true direction.' },
+      { title: 'Silver Bullet', content: 'The Silver Bullet is a specific setup that occurs during the 10 AM hour (EST) when price creates a liquidity sweep followed by a displacement move in the opposite direction.' },
+    ],
+  },
+  {
+    category: 'Wyckoff',
+    icon: 'BarChart3',
+    articles: [
+      { title: 'Accumulation', content: 'Wyckoff Accumulation is a sideways range where institutions accumulate positions. It has phases A through E, ending with a Spring (false breakdown) before markup begins.' },
+      { title: 'Distribution', content: 'Wyckoff Distribution is a sideways range where institutions distribute positions. It ends with an Upthrust (false breakout) before markdown begins.' },
+      { title: 'Spring', content: 'A Spring is a false move below the support of an accumulation range that traps sellers before price reverses upward. It is a high-probability buying opportunity.' },
+      { title: 'Composite Operator', content: 'The Composite Operator (CO) is Wyckoff\'s concept of the large institutional player who manipulates price to accumulate and distribute positions at favorable prices.' },
+    ],
+  },
+  {
+    category: 'Technical Indicators',
+    icon: 'Activity',
+    articles: [
+      { title: 'RSI (Relative Strength Index)', content: 'RSI measures the speed and change of price movements on a 0-100 scale. Values above 70 indicate overbought conditions, below 30 indicate oversold. Divergences between RSI and price can signal reversals.' },
+      { title: 'MACD', content: 'MACD (Moving Average Convergence Divergence) shows the relationship between two EMAs. Crossovers of the MACD line and signal line generate buy/sell signals. Histogram shows momentum strength.' },
+      { title: 'ATR (Average True Range)', content: 'ATR measures market volatility by averaging the true range over a period. It is used for setting stop losses, profit targets, and position sizing. Higher ATR = more volatile market.' },
+      { title: 'Bollinger Bands', content: 'Bollinger Bands consist of a middle SMA with upper and lower bands at 2 standard deviations. Price touching the bands can indicate overbought/oversold. Band squeeze indicates low volatility before expansion.' },
+    ],
+  },
+  {
+    category: 'Statistical Metrics',
+    icon: 'Sigma',
+    articles: [
+      { title: 'Z-Score', content: 'Z-Score measures how many standard deviations a data point is from the mean. A Z-Score above 2 or below -2 indicates the price is statistically stretched and may revert to the mean.' },
+      { title: 'Kelly Criterion', content: 'The Kelly Criterion calculates the optimal position size based on win probability and payoff ratio. Kelly% = W - (1-W)/R, where W = win rate and R = win/loss ratio.' },
+      { title: 'Sortino Ratio', content: 'The Sortino Ratio measures risk-adjusted returns using only downside deviation, unlike the Sharpe Ratio which uses total volatility. Higher Sortino = better downside-protected performance.' },
+      { title: 'Cointegration', content: 'Cointegration measures whether two assets move together in the long term. If two cointegrated assets diverge, a mean reversion trade can be placed expecting convergence.' },
+    ],
+  },
+];
+
 // ─── 21. LIVE PRICE TICKER ───
 export function generateLivePrices(instruments = DEFAULT_INSTRUMENTS) {
   return instruments.map(i => {
