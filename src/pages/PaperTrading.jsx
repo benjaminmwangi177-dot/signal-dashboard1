@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import SignalBadge from '@/components/dashboard/SignalBadge';
-import { BookOpen, Plus, X, Wallet } from 'lucide-react';
+import { BookOpen, Plus, X } from 'lucide-react';
 import { DEFAULT_INSTRUMENTS } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import { useTradingAccount } from '@/lib/useTradingAccount';

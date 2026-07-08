@@ -1,7 +1,7 @@
 import React from 'react';
 import SignalBadge from './SignalBadge';
 import RegimeBadge from './RegimeBadge';
-import { TrendingUp, TrendingDown, Clock, Target, Activity } from 'lucide-react';
+import { Clock, Target, Activity } from 'lucide-react';
 
 export default function InstitutionalConfidencePanel({ ic }) {
   if (!ic) return null;

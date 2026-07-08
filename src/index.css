@@ -64,10 +64,33 @@
 ::-webkit-scrollbar-thumb { background: hsl(220, 16%, 22%); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: hsl(220, 16%, 30%); }
 
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
 /* Glow effects for signals */
 .signal-buy-glow { box-shadow: 0 0 12px hsl(142, 70%, 45%, 0.2); }
 .signal-sell-glow { box-shadow: 0 0 12px hsl(0, 72%, 51%, 0.2); }
 .signal-confirmed-glow { box-shadow: 0 0 20px hsl(38, 92%, 50%, 0.25), 0 0 40px hsl(38, 92%, 50%, 0.1); }
+
+/* Glassmorphism */
+.glass {
+  @apply bg-card/60 backdrop-blur-md border border-white/5;
+}
+.glass-hover {
+  @apply hover:bg-white/5 transition-all duration-300;
+}
+
+/* Animations */
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker {
+  animation: ticker 30s linear infinite;
+}
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
 
 /* Pulse animation for live data */
 @keyframes pulse-dot {

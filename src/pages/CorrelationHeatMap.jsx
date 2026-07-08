@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { computeCorrelationMatrix, generateHeatMap } from '@/lib/advancedTools';
-import { DEFAULT_INSTRUMENTS, ASSET_CLASSES } from '@/lib/constants';
-import { Grid3x3, Flame, TrendingUp, TrendingDown } from 'lucide-react';
+import { Grid3x3, TrendingUp, TrendingDown } from 'lucide-react';
 
 export default function CorrelationHeatMap() {
   const navigate = useNavigate();

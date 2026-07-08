@@ -3,7 +3,7 @@ import { base44 } from '@/api/base44Client';
 import SignalBadge from '@/components/dashboard/SignalBadge';
 import ConfidenceMeter from '@/components/dashboard/ConfidenceMeter';
 import { RISK_COLORS } from '@/lib/constants';
-import { Zap, Search, SlidersHorizontal, Brain, Loader2 } from 'lucide-react';
+import { Zap, Search, Brain, Loader2 } from 'lucide-react';
 import { generateSignalExplanation } from '@/lib/signalEngine';
 
 export default function Signals() {

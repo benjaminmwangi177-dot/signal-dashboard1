@@ -5,7 +5,7 @@ import { analyzeInstrument } from '@/lib/signalEngine';
 import { ASSET_CLASSES, DEFAULT_INSTRUMENTS } from '@/lib/constants';
 import ConfirmedSignalCard from '@/components/dashboard/ConfirmedSignalCard';
 import InstrumentRow from '@/components/dashboard/InstrumentRow';
-import { Zap, TrendingUp, TrendingDown, Minus, RefreshCw, Filter } from 'lucide-react';
+import { Zap, TrendingUp, TrendingDown, RefreshCw, Search } from 'lucide-react';
 
 export default function Home() {
   const navigate = useNavigate();
@@ -13,6 +13,7 @@ export default function Home() {
   const [analyses, setAnalyses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -45,10 +46,23 @@ export default function Home() {
 
   const confirmedSignals = useMemo(() => analyses.filter(a => a.confirmed), [analyses]);
   const filteredAnalyses = useMemo(() => {
-    if (activeFilter === 'all') return analyses;
-    if (activeFilter === 'confirmed') return confirmedSignals;
-    return analyses.filter(a => a.asset_class === activeFilter);
-  }, [analyses, activeFilter, confirmedSignals]);
+    let result = analyses;
+    if (activeFilter === 'confirmed') {
+      result = confirmedSignals;
+    } else if (activeFilter !== 'all') {
+      result = analyses.filter(a => a.asset_class === activeFilter);
+    }
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(a =>
+        a.symbol.toLowerCase().includes(query) ||
+        a.name.toLowerCase().includes(query)
+      );
+    }
+
+    return result;
+  }, [analyses, activeFilter, confirmedSignals, searchQuery]);
 
   const stats = useMemo(() => {
     const buy = analyses.filter(a => a.confirmed?.direction === 'BUY').length;
@@ -130,15 +144,27 @@ export default function Home() {
         </section>
       )}
 
-      {/* Filter tabs */}
-      <div className="flex items-center gap-1 overflow-x-auto pb-1">
-        <FilterTab label="All" value="all" active={activeFilter} onClick={setActiveFilter} count={analyses.length} />
+      {/* Search and Filters */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="relative w-full md:w-80">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search symbols or names..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-9 pr-4 py-2 bg-secondary/50 border border-border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all text-sm"
+          />
+        </div>
+        <div className="flex items-center gap-1 overflow-x-auto pb-1 no-scrollbar">
+          <FilterTab label="All" value="all" active={activeFilter} onClick={setActiveFilter} count={analyses.length} />
         <FilterTab label="Confirmed" value="confirmed" active={activeFilter} onClick={setActiveFilter} count={confirmedSignals.length} />
-        {ASSET_CLASSES.map(ac => {
-          const count = analyses.filter(a => a.asset_class === ac.key).length;
-          if (count === 0) return null;
-          return <FilterTab key={ac.key} label={ac.label} value={ac.key} active={activeFilter} onClick={setActiveFilter} count={count} />;
-        })}
+          {ASSET_CLASSES.map(ac => {
+            const count = analyses.filter(a => a.asset_class === ac.key).length;
+            if (count === 0) return null;
+            return <FilterTab key={ac.key} label={ac.label} value={ac.key} active={activeFilter} onClick={setActiveFilter} count={count} />;
+          })}
+        </div>
       </div>
 
       {/* Instrument list */}

@@ -9,7 +9,7 @@ export default function InstrumentRow({ analysis, onClick }) {
   return (
     <button
       onClick={onClick}
-      className="w-full text-left flex items-center gap-4 px-3 py-2.5 rounded-lg hover:bg-secondary/50 transition-colors group border border-transparent hover:border-border"
+      className="w-full text-left flex items-center gap-4 px-3 py-2.5 rounded-lg hover:bg-secondary/50 transition-colors group border border-transparent hover:border-border glass-hover"
     >
       {/* Symbol */}
       <div className="w-24 flex-shrink-0">

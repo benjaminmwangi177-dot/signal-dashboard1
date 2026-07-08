@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { CandlestickChart, TrendingUp, BarChart3, Calendar, Flame, Signal, Target, Activity } from 'lucide-react';
+import { CandlestickChart, BarChart3, Calendar, Flame, Signal, Target } from 'lucide-react';
 import SignalBadge from '@/components/dashboard/SignalBadge';
 
 const TV_SYMBOLS = [
@@ -170,7 +170,6 @@ export default function TradingViewCharts() {
               className="w-full"
               style={{ height: '350px' }}
               frameBorder="0"
-              allowTransparency="true"
               title="Technical Analysis"
             />
           </div>
@@ -193,7 +192,6 @@ export default function TradingViewCharts() {
               className="w-full"
               style={{ height: 'calc(100% - 41px)', minHeight: '450px' }}
               frameBorder="0"
-              allowTransparency="true"
               title="TradingView Advanced Chart"
             />
           </div>
@@ -205,7 +203,6 @@ export default function TradingViewCharts() {
               className="w-full"
               style={{ height: '46px' }}
               frameBorder="0"
-              allowTransparency="true"
               title="Ticker Tape"
             />
           </div>
@@ -226,7 +223,6 @@ export default function TradingViewCharts() {
               className="w-full"
               style={{ height: '300px' }}
               frameBorder="0"
-              allowTransparency="true"
               title="Crypto Heat Map"
             />
           </div>
@@ -244,7 +240,6 @@ export default function TradingViewCharts() {
               className="w-full"
               style={{ height: '400px' }}
               frameBorder="0"
-              allowTransparency="true"
               title="Market Overview"
             />
           </div>
@@ -262,7 +257,6 @@ export default function TradingViewCharts() {
               className="w-full"
               style={{ height: '300px' }}
               frameBorder="0"
-              allowTransparency="true"
               title="Economic Calendar"
             />
           </div>

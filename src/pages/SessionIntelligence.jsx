@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { getSessionIntelligence, getSessionStats, getSessionVolumeVolatility, getHistoricalSessionPerformance, TRADING_SESSIONS } from '@/lib/advancedTools';
+import { getSessionIntelligence, getSessionStats, getSessionVolumeVolatility, getHistoricalSessionPerformance } from '@/lib/advancedTools';
 import { DEFAULT_INSTRUMENTS } from '@/lib/constants';
 import { Clock, Globe, Zap, Activity, BarChart3, TrendingUp, Timer } from 'lucide-react';
 

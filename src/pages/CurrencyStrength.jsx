@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { calculateCurrencyStrength, CURRENCIES } from '@/lib/advancedTools';
+import { calculateCurrencyStrength } from '@/lib/advancedTools';
 import { DIRECTION_COLORS } from '@/lib/constants';
 import { Coins } from 'lucide-react';
 

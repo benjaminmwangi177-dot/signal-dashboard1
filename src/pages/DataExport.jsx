@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { getSignalIntelligenceDB, calculateAccuracyStats, getVolatilityIntelligence, getAdvancedRiskMetrics } from '@/lib/advancedTools';
-import { Download, FileJson, FileSpreadsheet, FileText } from 'lucide-react';
+import { Download, FileJson, FileSpreadsheet } from 'lucide-react';
 
 export default function DataExport() {
   const [exporting, setExporting] = useState(false);
