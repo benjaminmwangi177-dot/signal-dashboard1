@@ -6,7 +6,7 @@ import {
   Grid3x3, Globe, Coins, Bookmark, Calendar, History, BookOpenCheck,
   BellRing, Blocks, Target, Layers, ListOrdered, Crosshair, Briefcase, ClipboardList,
   Database, Gauge, Heart, MessageSquare, Sparkles, Waves,
-  Sigma, Shield, GitCompare, Brain, CandlestickChart, Download, Wallet
+  Sigma, Shield, GitCompare, Brain, CandlestickChart, Download, Wallet, BarChart
 } from 'lucide-react';
 import PriceTicker from '@/components/dashboard/PriceTicker';
 
@@ -30,6 +30,7 @@ const NAV_ITEMS = [
   { path: '/economic-calendar', label: 'Economic Calendar', icon: Calendar },
   { path: '/watchlists', label: 'Watchlists', icon: Bookmark },
   { path: '/support-resistance', label: 'S&R / Liquidity', icon: Layers },
+  { path: '/order-flow', label: 'Order Flow', icon: BarChart },
   { path: '/replay', label: 'Replay Mode', icon: History },
   { path: '/portfolio', label: 'Portfolio', icon: Briefcase },
   { path: '/alert-builder', label: 'Alert Builder', icon: BellRing },
