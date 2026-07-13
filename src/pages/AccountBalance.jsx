@@ -231,7 +231,7 @@ function StatusPill({ icon: Icon, label }) {
   );
 }
 
-function BalanceCard({ label, value, subValue, color }) {
+function BalanceCard({ label, value, subValue = null, color }) {
   return (
     <div className="rounded-xl border border-border bg-card p-4">
       <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>

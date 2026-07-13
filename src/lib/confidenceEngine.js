@@ -97,6 +97,7 @@ export function computeInstitutionalConfidence(symbol, name, assetClass, timefra
       direction: signal.direction,
       confidence: signal.confidence,
       raw_weight: rawWeight,
+      weight_pct: 0,
     };
   });
 

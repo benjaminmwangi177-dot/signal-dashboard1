@@ -116,7 +116,10 @@ Write as if briefing a trader. Example: "Buy bias: price swept liquidity below p
         required: ["explanation"]
       }
     });
-    return res.explanation;
+    if (typeof res === 'object' && res !== null && 'explanation' in res && typeof res.explanation === 'string') {
+      return res.explanation;
+    }
+    throw new Error('Invalid explanation response');
   } catch {
     return `${signal.direction} signal on ${signal.instrument_symbol} with ${signal.confidence}% confidence. ${signal.agreement_count || ''} strategies aligned.`;
   }

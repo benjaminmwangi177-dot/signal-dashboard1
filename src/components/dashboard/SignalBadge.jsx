@@ -1,7 +1,7 @@
 import React from 'react';
 import { DIRECTION_COLORS } from '@/lib/constants';
 
-export default function SignalBadge({ direction, confidence, size = 'sm' }) {
+export default function SignalBadge({ direction, confidence = null, size = 'sm' }) {
   const colors = DIRECTION_COLORS[direction] || DIRECTION_COLORS.NEUTRAL;
   const sizeClasses = size === 'lg'
     ? 'px-3 py-1.5 text-sm font-semibold'
