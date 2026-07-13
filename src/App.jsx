@@ -1,16 +1,9 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
-import { AuthProvider } from '@/lib/AuthContext';
 import ScrollToTop from './components/ScrollToTop';
-import ProtectedRoute from '@/components/ProtectedRoute';
-
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import ForgotPassword from '@/pages/ForgotPassword';
-import ResetPassword from '@/pages/ResetPassword';
 
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import Home from '@/pages/Home';
@@ -57,68 +50,64 @@ import OrderFlow from '@/pages/OrderFlow';
 
 function App() {
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <ScrollToTop />
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+    <QueryClientProvider client={queryClientInstance}>
+      <Router>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/login" element={<Navigate to="/" replace />} />
+          <Route path="/register" element={<Navigate to="/" replace />} />
+          <Route path="/forgot-password" element={<Navigate to="/" replace />} />
+          <Route path="/reset-password" element={<Navigate to="/" replace />} />
 
-            <Route element={<ProtectedRoute />}>
-              <Route element={<DashboardLayout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/scanner" element={<MarketScanner />} />
-                <Route path="/instrument/:symbol" element={<InstrumentDetail />} />
-                <Route path="/signals" element={<Signals />} />
-                <Route path="/strategies" element={<Strategies />} />
-                <Route path="/backtest" element={<Backtest />} />
-                <Route path="/paper-trading" element={<PaperTrading />} />
-                <Route path="/account" element={<AccountBalance />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/settings" element={<SettingsPage />} />
-                <Route path="/correlation" element={<CorrelationHeatMap />} />
-                <Route path="/sessions" element={<SessionIntelligence />} />
-                <Route path="/currency-strength" element={<CurrencyStrength />} />
-                <Route path="/watchlists" element={<SmartWatchlists />} />
-                <Route path="/economic-calendar" element={<EconomicCalendar />} />
-                <Route path="/replay" element={<ReplayMode />} />
-                <Route path="/journal" element={<TradeJournal />} />
-                <Route path="/alert-builder" element={<AlertBuilder />} />
-                <Route path="/strategy-builder" element={<StrategyBuilder />} />
-                <Route path="/probability" element={<ProbabilityDashboard />} />
-                <Route path="/support-resistance" element={<SupportResistance />} />
-                <Route path="/signal-queue" element={<SignalQueue />} />
-                <Route path="/accuracy" element={<AccuracyDashboard />} />
-                <Route path="/portfolio" element={<PortfolioExposure />} />
-                <Route path="/data-quality" element={<DataQualityMonitor />} />
-                <Route path="/performance" element={<PerformanceOptimizer />} />
-                <Route path="/system-health" element={<SystemHealth />} />
-                <Route path="/ai-commentary" element={<AICommentary />} />
-                <Route path="/ai-research" element={<AIResearchAssistant />} />
-                <Route path="/volatility" element={<VolatilityIntelligence />} />
-                <Route path="/statistical" element={<StatisticalEngine />} />
-                <Route path="/risk-metrics" element={<RiskMetrics />} />
-                <Route path="/strategy-comparison" element={<StrategyComparison />} />
-                <Route path="/knowledge-base" element={<KnowledgeBase />} />
-                <Route path="/explainability" element={<Explainability />} />
-                <Route path="/signal-intelligence" element={<SignalIntelligenceDB />} />
-                <Route path="/microstructure" element={<Microstructure />} />
-                <Route path="/data-export" element={<DataExport />} />
-                <Route path="/tradingview" element={<TradingViewCharts />} />
-                <Route path="/order-flow" element={<OrderFlow />} />
-              </Route>
-            </Route>
+          <Route element={<DashboardLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/scanner" element={<MarketScanner />} />
+            <Route path="/instrument/:symbol" element={<InstrumentDetail />} />
+            <Route path="/signals" element={<Signals />} />
+            <Route path="/strategies" element={<Strategies />} />
+            <Route path="/backtest" element={<Backtest />} />
+            <Route path="/paper-trading" element={<PaperTrading />} />
+            <Route path="/account" element={<AccountBalance />} />
+            <Route path="/analytics" element={<Analytics />} />
+            <Route path="/notifications" element={<Notifications />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/correlation" element={<CorrelationHeatMap />} />
+            <Route path="/sessions" element={<SessionIntelligence />} />
+            <Route path="/currency-strength" element={<CurrencyStrength />} />
+            <Route path="/watchlists" element={<SmartWatchlists />} />
+            <Route path="/economic-calendar" element={<EconomicCalendar />} />
+            <Route path="/replay" element={<ReplayMode />} />
+            <Route path="/journal" element={<TradeJournal />} />
+            <Route path="/alert-builder" element={<AlertBuilder />} />
+            <Route path="/strategy-builder" element={<StrategyBuilder />} />
+            <Route path="/probability" element={<ProbabilityDashboard />} />
+            <Route path="/support-resistance" element={<SupportResistance />} />
+            <Route path="/signal-queue" element={<SignalQueue />} />
+            <Route path="/accuracy" element={<AccuracyDashboard />} />
+            <Route path="/portfolio" element={<PortfolioExposure />} />
+            <Route path="/data-quality" element={<DataQualityMonitor />} />
+            <Route path="/performance" element={<PerformanceOptimizer />} />
+            <Route path="/system-health" element={<SystemHealth />} />
+            <Route path="/ai-commentary" element={<AICommentary />} />
+            <Route path="/ai-research" element={<AIResearchAssistant />} />
+            <Route path="/volatility" element={<VolatilityIntelligence />} />
+            <Route path="/statistical" element={<StatisticalEngine />} />
+            <Route path="/risk-metrics" element={<RiskMetrics />} />
+            <Route path="/strategy-comparison" element={<StrategyComparison />} />
+            <Route path="/knowledge-base" element={<KnowledgeBase />} />
+            <Route path="/explainability" element={<Explainability />} />
+            <Route path="/signal-intelligence" element={<SignalIntelligenceDB />} />
+            <Route path="/microstructure" element={<Microstructure />} />
+            <Route path="/data-export" element={<DataExport />} />
+            <Route path="/tradingview" element={<TradingViewCharts />} />
+            <Route path="/order-flow" element={<OrderFlow />} />
+          </Route>
 
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Router>
-        <Toaster />
-      </QueryClientProvider>
-    </AuthProvider>
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Router>
+      <Toaster />
+    </QueryClientProvider>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { getVolatilityIntelligence } from '@/lib/advancedTools';
-import { Activity, AlertTriangle, Minimize2, Maximize2 } from 'lucide-react';
+import { Activity, Minimize2, Maximize2 } from 'lucide-react';
 
 export default function VolatilityIntelligence() {
   const data = useMemo(() => getVolatilityIntelligence(), []);

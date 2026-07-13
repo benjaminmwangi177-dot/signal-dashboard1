@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { computeCorrelationMatrix, generateHeatMap } from '@/lib/advancedTools';
-import { DEFAULT_INSTRUMENTS, ASSET_CLASSES } from '@/lib/constants';
-import { Grid3x3, Flame, TrendingUp, TrendingDown } from 'lucide-react';
+import { Grid3x3, TrendingUp, TrendingDown } from 'lucide-react';
 
 export default function CorrelationHeatMap() {
   const navigate = useNavigate();
@@ -16,12 +15,6 @@ export default function CorrelationHeatMap() {
     if (corr > -0.3) return 'bg-slate-600/40';
     if (corr > -0.7) return 'bg-red-500/40';
     return 'bg-red-500/80';
-  }
-
-  function getHeatColor(change) {
-    const abs = Math.abs(change);
-    const opacity = Math.min(0.9, 0.2 + abs / 4);
-    return change > 0 ? `bg-emerald-500/[${opacity}]` : `bg-red-500/[${opacity}]`;
   }
 
   return (

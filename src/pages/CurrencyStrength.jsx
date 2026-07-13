@@ -1,11 +1,10 @@
 import React, { useMemo } from 'react';
-import { calculateCurrencyStrength, CURRENCIES } from '@/lib/advancedTools';
+import { calculateCurrencyStrength } from '@/lib/advancedTools';
 import { DIRECTION_COLORS } from '@/lib/constants';
 import { Coins } from 'lucide-react';
 
 export default function CurrencyStrength() {
   const data = useMemo(() => calculateCurrencyStrength(), []);
-  const maxStrength = 100;
 
   return (
     <div className="space-y-4 max-w-4xl mx-auto">

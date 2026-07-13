@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { generateEconomicCalendar } from '@/lib/advancedTools';
-import { Calendar, AlertTriangle, Clock } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 
 const IMPACT_COLORS = {
   High: { bg: 'bg-red-500/10', text: 'text-red-400', border: 'border-red-500/30', dot: 'bg-red-400' },

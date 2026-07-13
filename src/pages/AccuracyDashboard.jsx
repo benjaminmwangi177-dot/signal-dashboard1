@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { calculateAccuracyStats } from '@/lib/advancedTools';
-import { Target, TrendingUp, TrendingDown, Award } from 'lucide-react';
+import { Target } from 'lucide-react';
 
 export default function AccuracyDashboard() {
   const stats = useMemo(() => calculateAccuracyStats(), []);

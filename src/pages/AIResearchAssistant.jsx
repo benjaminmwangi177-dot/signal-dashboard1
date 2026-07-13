@@ -35,7 +35,11 @@ Context data: ${context}
 Question: ${question}`,
         response_json_schema: { type: 'object', properties: { answer: { type: 'string' } }, required: ['answer'] },
       });
-      setAnswer(res.answer);
+      if (typeof res === 'object' && res !== null && 'answer' in res && typeof res.answer === 'string') {
+        setAnswer(res.answer);
+      } else {
+        throw new Error('Invalid research response');
+      }
     } catch {
       setAnswer('Unable to process your query at this time. Please try again.');
     }

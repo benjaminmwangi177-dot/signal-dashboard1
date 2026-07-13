@@ -14,6 +14,8 @@ const badgeVariants = cva(
           "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
           "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
+        success:
+          "border-transparent bg-emerald-500/15 text-emerald-400",
         outline: "text-foreground",
       },
     },
@@ -23,6 +25,9 @@ const badgeVariants = cva(
   }
 )
 
+/**
+ * @param {React.HTMLAttributes<HTMLDivElement> & { variant?: "default" | "secondary" | "destructive" | "success" | "outline" }} props
+ */
 function Badge({
   className,
   variant,

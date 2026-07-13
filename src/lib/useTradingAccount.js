@@ -1,131 +1,133 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '@/lib/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { useCallback, useEffect, useState } from 'react';
+import { PAPER_ACCOUNT_STARTING_BALANCE } from '@/lib/constants';
+
+const STORAGE_KEY = 'signal-deck-paper-account';
+const ACCOUNT_EVENT = 'signal-deck-paper-account-updated';
+
+function createInitialState() {
+  const createdAt = new Date().toISOString();
+
+  return {
+    account: {
+      id: 'local-paper-account',
+      balance: PAPER_ACCOUNT_STARTING_BALANCE,
+      initial_balance: PAPER_ACCOUNT_STARTING_BALANCE,
+      updated_at: createdAt,
+    },
+    transactions: [
+      {
+        id: 'free-paper-balance',
+        type: 'demo_credit',
+        amount: PAPER_ACCOUNT_STARTING_BALANCE,
+        balance_after: PAPER_ACCOUNT_STARTING_BALANCE,
+        description: 'Free virtual paper-trading balance',
+        created_at: createdAt,
+      },
+    ],
+  };
+}
+
+function readState() {
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : createInitialState();
+  } catch {
+    return createInitialState();
+  }
+}
+
+function saveState(state) {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  window.dispatchEvent(new CustomEvent(ACCOUNT_EVENT));
+}
 
 export function useTradingAccount() {
-  const { user } = useAuth();
-  const [account, setAccount] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState(() => readState());
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (user?.id) {
-      loadAccount();
+    if (!window.localStorage.getItem(STORAGE_KEY)) {
+      saveState(state);
     }
-  }, [user?.id]);
+
+    const syncState = () => setState(readState());
+    window.addEventListener(ACCOUNT_EVENT, syncState);
+    window.addEventListener('storage', syncState);
+
+    return () => {
+      window.removeEventListener(ACCOUNT_EVENT, syncState);
+      window.removeEventListener('storage', syncState);
+    };
+  }, []);
 
   const loadAccount = useCallback(async () => {
-    if (!user?.id) return null;
-
-    try {
-      setLoading(true);
-      setError(null);
-
-      let { data: accountData, error: fetchError } = await supabase
-        .from('trading_accounts')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle();
-
-      if (fetchError) throw fetchError;
-
-      if (!accountData) {
-        const { data: newAccount, error: createError } = await supabase
-          .from('trading_accounts')
-          .insert({ user_id: user.id, balance: 10000, initial_balance: 10000 })
-          .select()
-          .single();
-
-        if (createError) throw createError;
-
-        await supabase.from('transactions').insert({
-          account_id: newAccount.id,
-          user_id: user.id,
-          type: 'deposit',
-          amount: 10000,
-          balance_after: 10000,
-          description: 'Initial paper trading balance'
-        });
-
-        accountData = newAccount;
-      }
-
-      setAccount(accountData);
-      return accountData;
-    } catch (err) {
-      console.error('Error loading account:', err);
-      setError(err.message);
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, [user?.id]);
+    setLoading(true);
+    setError(null);
+    const nextState = readState();
+    setState(nextState);
+    setLoading(false);
+    return nextState.account;
+  }, []);
 
   const updateBalance = useCallback(async (amount, type, description, metadata = {}) => {
-    if (!account) return false;
-
     try {
-      const newBalance = account.balance + amount;
+      const currentState = readState();
+      const newBalance = currentState.account.balance + amount;
 
       if (newBalance < 0) {
         throw new Error('Insufficient balance');
       }
 
-      const { error: updateError } = await supabase
-        .from('trading_accounts')
-        .update({ balance: newBalance })
-        .eq('id', account.id);
-
-      if (updateError) throw updateError;
-
-      const { error: txError } = await supabase
-        .from('transactions')
-        .insert({
-          account_id: account.id,
-          user_id: user.id,
+      const nextState = {
+        account: {
+          ...currentState.account,
+          balance: newBalance,
+          updated_at: new Date().toISOString(),
+        },
+        transactions: [
+          {
+            id: crypto.randomUUID(),
           type,
           amount,
           balance_after: newBalance,
           description,
-          metadata
-        });
+            metadata,
+            created_at: new Date().toISOString(),
+          },
+          ...currentState.transactions,
+        ],
+      };
 
-      if (txError) throw txError;
-
-      setAccount({ ...account, balance: newBalance });
+      saveState(nextState);
+      setState(nextState);
       return true;
     } catch (err) {
-      console.error('Error updating balance:', err);
+      setError(err.message);
       throw err;
     }
-  }, [account, user?.id]);
+  }, []);
 
   const getTransactions = useCallback(async (limit = 100) => {
-    if (!account) return [];
+    return readState().transactions.slice(0, limit);
+  }, []);
 
-    const { data, error } = await supabase
-      .from('transactions')
-      .select('*')
-      .eq('account_id', account.id)
-      .order('created_at', { ascending: false })
-      .limit(limit);
-
-    if (error) {
-      console.error('Error fetching transactions:', error);
-      return [];
-    }
-
-    return data || [];
-  }, [account]);
+  const resetAccount = useCallback(() => {
+    const nextState = createInitialState();
+    saveState(nextState);
+    setState(nextState);
+  }, []);
 
   return {
-    account,
+    account: state.account,
+    transactions: state.transactions,
     loading,
     error,
     loadAccount,
     updateBalance,
     getTransactions,
-    balance: account?.balance || 0,
-    initialBalance: account?.initial_balance || 10000
+    resetAccount,
+    balance: state.account.balance,
+    initialBalance: state.account.initial_balance,
   };
 }

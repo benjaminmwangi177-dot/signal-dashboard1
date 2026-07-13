@@ -27,6 +27,12 @@ export const TRADING_SESSIONS = [
   { key: 'new_york', label: 'New York', start: 13, end: 22, color: '#f59e0b', vol: 'High' },
 ];
 
+function isSessionActive(session, hour = new Date().getUTCHours()) {
+  return session.start < session.end
+    ? hour >= session.start && hour < session.end
+    : hour >= session.start || hour < session.end;
+}
+
 export function getSessionIntelligence() {
   const now = new Date();
   const hour = now.getUTCHours();
@@ -34,9 +40,7 @@ export function getSessionIntelligence() {
   const currentMinutes = hour * 60 + minute;
 
   const sessions = TRADING_SESSIONS.map(s => {
-    const active = s.start < s.end
-      ? hour >= s.start && hour < s.end
-      : hour >= s.start || hour < s.end;
+    const active = isSessionActive(s, hour);
 
     // Minutes until open / close (handles overnight wrap)
     const startMin = s.start * 60;
@@ -66,6 +70,7 @@ export function getSessionStats(symbol) {
   const hash = (symbol || '').split('').reduce((a, c) => a + c.charCodeAt(0), 0);
   return TRADING_SESSIONS.map(s => ({
     ...s,
+    active: isSessionActive(s),
     pip_range: 20 + ((hash + s.start) % 80),
     win_rate: 45 + ((hash * s.start) % 40),
     trade_count: 5 + ((hash + s.end) % 20),
@@ -89,7 +94,7 @@ export function getSessionVolumeVolatility() {
       });
     }
     const peakHour = hours.reduce((a, b) => (b.volume > a.volume ? b : a), hours[0]);
-    return { ...s, hours, peak_hour: peakHour.hour, avg_volume: Math.round(hours.reduce((s2, x) => s2 + x.volume, 0) / hours.length), avg_volatility: Math.round(hours.reduce((s2, x) => s2 + x.volatility, 0) / hours.length) };
+    return { ...s, active: isSessionActive(s), hours, peak_hour: peakHour.hour, avg_volume: Math.round(hours.reduce((s2, x) => s2 + x.volume, 0) / hours.length), avg_volatility: Math.round(hours.reduce((s2, x) => s2 + x.volatility, 0) / hours.length) };
   });
 }
 

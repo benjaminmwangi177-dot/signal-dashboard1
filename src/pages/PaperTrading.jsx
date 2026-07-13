@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import SignalBadge from '@/components/dashboard/SignalBadge';
-import { BookOpen, Plus, X, Wallet } from 'lucide-react';
+import { BookOpen, Plus, X } from 'lucide-react';
 import { DEFAULT_INSTRUMENTS } from '@/lib/constants';
 import { useToast } from '@/components/ui/use-toast';
 import { useTradingAccount } from '@/lib/useTradingAccount';
 
 export default function PaperTrading() {
   const { toast } = useToast();
-  const { balance, loading: accountLoading, updateBalance } = useTradingAccount();
+  const { balance, updateBalance } = useTradingAccount();
   const [trades, setTrades] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -77,7 +77,7 @@ export default function PaperTrading() {
 
       loadTrades();
       toast({ title: `Trade closed: ${pnlDollars >= 0 ? '+' : ''}$${pnlDollars.toFixed(2)}` });
-    } catch (err) {
+    } catch {
       toast({ title: 'Error closing trade', variant: 'destructive' });
     }
   }

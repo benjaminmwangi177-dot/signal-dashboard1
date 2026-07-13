@@ -1,3 +1,7 @@
+export const ADMIN_EMAIL = 'bbbenjjjyyy@gmail.com';
+export const FREE_ACCESS_LABEL = 'Free forever · No subscription';
+export const PAPER_ACCOUNT_STARTING_BALANCE = 100000;
+
 export const ASSET_CLASSES = [
   { key: 'forex', label: 'Forex', icon: 'DollarSign' },
   { key: 'crypto', label: 'Crypto', icon: 'Bitcoin' },
