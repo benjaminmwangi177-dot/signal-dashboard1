@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { calculateSupportResistance, generateLiquidityMap } from '@/lib/advancedTools';
 import { DEFAULT_INSTRUMENTS } from '@/lib/constants';
-import SignalBadge from '@/components/dashboard/SignalBadge';
 import { Layers, Droplets } from 'lucide-react';
 
 export default function SupportResistance() {

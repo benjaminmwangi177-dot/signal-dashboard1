@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { calculateProbabilities } from '@/lib/advancedTools';
-import { Target, TrendingUp } from 'lucide-react';
+import { Target } from 'lucide-react';
 
 export default function ProbabilityDashboard() {
   const navigate = useNavigate();

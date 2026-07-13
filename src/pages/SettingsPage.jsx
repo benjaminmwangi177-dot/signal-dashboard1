@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { DEFAULT_INSTRUMENTS, ASSET_CLASSES } from '@/lib/constants';
-import { Settings, Plus, Trash2, Save, Loader2 } from 'lucide-react';
+import { ADMIN_EMAIL, ASSET_CLASSES, DEFAULT_INSTRUMENTS, FREE_ACCESS_LABEL } from '@/lib/constants';
+import { Gift, Loader2, Mail, Plus, Save, Settings, ShieldCheck, Trash2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 
 export default function SettingsPage() {
@@ -48,7 +48,13 @@ export default function SettingsPage() {
         await base44.entities.Instrument.delete(inst.id);
       }
       for (const inst of instruments) {
-        const { id, created_date, updated_date, created_by_id, ...data } = inst;
+        const data = {
+          symbol: inst.symbol,
+          name: inst.name,
+          asset_class: inst.asset_class,
+          enabled: inst.enabled !== false,
+          data_source: inst.data_source,
+        };
         await base44.entities.Instrument.create(data);
       }
       toast({ title: 'Saved', description: 'Instrument list updated.' });
@@ -78,6 +84,34 @@ export default function SettingsPage() {
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
           Save
         </button>
+      </div>
+
+      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div className="flex items-center gap-2 text-emerald-300">
+              <Gift className="h-4 w-4" />
+              <h2 className="text-xs font-bold uppercase tracking-wider">Access policy</h2>
+            </div>
+            <p className="mt-2 text-sm font-medium">{FREE_ACCESS_LABEL}</p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              All platform tools are available without billing, plans, trials, or payment details.
+            </p>
+          </div>
+          <div className="space-y-2 text-xs">
+            <div className="flex items-center gap-2 text-emerald-300">
+              <ShieldCheck className="h-4 w-4" />
+              Unlimited platform usage
+            </div>
+            <a
+              href={`mailto:${ADMIN_EMAIL}`}
+              className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-emerald-300"
+            >
+              <Mail className="h-4 w-4" />
+              Administrator: {ADMIN_EMAIL}
+            </a>
+          </div>
+        </div>
       </div>
 
       {/* Confirmation settings */}

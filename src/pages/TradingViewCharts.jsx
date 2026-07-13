@@ -37,7 +37,6 @@ export default function TradingViewCharts() {
           className="w-full"
           style={{ height: '500px' }}
           frameBorder="0"
-          allowTransparency="true"
           title="TradingView Chart"
         />
       </div>
@@ -52,7 +51,6 @@ export default function TradingViewCharts() {
           className="w-full"
           style={{ height: '400px' }}
           frameBorder="0"
-          allowTransparency="true"
           title="TradingView Market Overview"
         />
       </div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { STRATEGY_BLOCKS } from '@/lib/advancedTools';
-import { Blocks, Plus, X, Play, Save } from 'lucide-react';
+import { Blocks, X, Play, Save } from 'lucide-react';
 
 export default function StrategyBuilder() {
   const [blocks, setBlocks] = useState({ entry_condition: null, confirmation: null, stop_loss: null, take_profit: null, filter: null });

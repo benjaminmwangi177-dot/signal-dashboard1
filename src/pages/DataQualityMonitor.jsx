@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { getDataQualityStats } from '@/lib/advancedTools';
-import { Database, Activity, AlertTriangle } from 'lucide-react';
+import { Database } from 'lucide-react';
 
 const STATUS_STYLES = {
   excellent: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', dot: 'bg-emerald-400' },
